@@ -1,8 +1,24 @@
 import drawSegmentedCircle from "./clock.js"
 
-$(() => {
+async function getSetting() {
+    const url = "js/data/settings.json"
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`Network response was not ok (status: ${response.status})`)
+      }
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error('Failed to load JSON:', error)
+      throw error
+    }
+  }
+
+$(async () => {
+    const settings = await getSetting()
     const worker = new ElementWorker()
-    const events = new EventSource("https://darkclockapi.glitch.me/events/e3647b84-d25f-4dee-a0cc-dcfcd3f1b5bb", {})
+    const events = new EventSource(settings.url, {})
     events.onmessage = (event) => {
         worker.update(JSON.parse(event.data))
     }
