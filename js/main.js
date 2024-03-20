@@ -26,6 +26,10 @@ $(async () => {
         console.log(error)
     }
     console.log(events.readyState)
+    if (settings.title) {
+        $(".navbar-brand").text(settings.title)
+        $("title").text(settings.title)
+    }
 })
 /**
  * @typedef {Object} SiteClocks
